@@ -118,4 +118,4 @@ export interface Notification {
   timestamp: string;
 }
 
-export { Agent, Proposal, Task, AgentMessage, AgentFeedback, AgentCommunication, AgentVote };
+export type { Agent, Proposal, Task, AgentMessage, AgentFeedback, AgentCommunication, AgentVote, TaskPriority, Activity, Notification };
