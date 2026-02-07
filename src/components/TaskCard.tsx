@@ -112,10 +112,12 @@ export function TaskCard({ task, columnId }: TaskCardProps) {
       <div 
         className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl"
         style={{ 
-          background: task.status === 'done' 
+          background: task.status === 'completed' 
             ? 'linear-gradient(180deg, #10b981, #059669)' 
             : task.status === 'blocked'
             ? 'linear-gradient(180deg, #ef4444, #dc2626)'
+            : task.status === 'failed'
+            ? 'linear-gradient(180deg, #ff3366, #cc0022)'
             : 'linear-gradient(180deg, #00d4ff, #3b82f6)'
         }}
       />
