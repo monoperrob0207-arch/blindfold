@@ -53,6 +53,8 @@ interface BlindfoldStore {
   approveProposal: (id: string, approved: boolean) => void;
   addTask: (task: Task) => void;
   updateTask: (id: string, updates: Partial<Task>) => void;
+  assignTask: (taskId: string, agentId: string) => void;
+  updateTaskStatus: (taskId: string, status: Task['status']) => void;
 }
 
 export const useBlindfoldStore = create<BlindfoldStore>((set, get) => ({
@@ -135,7 +137,25 @@ export const useBlindfoldStore = create<BlindfoldStore>((set, get) => ({
   
   updateTask: (id, updates) => {
     set(state => ({
-      tasks: state.tasks.map(t => t.id === id ? { ...t, ...updates } : t)
+      tasks: state.tasks.map(t => t.id === id ? { ...t, ...updates, updatedAt: new Date().toISOString() } : t)
+    }));
+  },
+  
+  assignTask: (taskId, agentId) => {
+    set(state => ({
+      tasks: state.tasks.map(t => t.id === taskId ? { ...t, assignee: agentId } : t)
+    }));
+  },
+  
+  updateTaskStatus: (taskId, status) => {
+    set(state => ({
+      tasks: state.tasks.map(t => t.id === taskId ? { 
+        ...t, 
+        status, 
+        updatedAt: new Date().toISOString(),
+        startedAt: status === 'in_progress' ? new Date().toISOString() : t.startedAt,
+        completedAt: status === 'completed' ? new Date().toISOString() : t.completedAt
+      } : t)
     }));
   }
 }));

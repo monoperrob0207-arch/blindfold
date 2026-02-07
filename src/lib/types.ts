@@ -52,7 +52,13 @@ export interface Task {
   startedAt?: string;
   completedAt?: string;
   result?: string;
+  updatedAt?: string;
+  progress?: number;
+  comments?: number;
+  assignee?: string;
 }
+
+export type TaskPriority = 'low' | 'medium' | 'high' | 'critical';
 
 export interface AgentMessage {
   id: string;
