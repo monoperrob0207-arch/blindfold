@@ -42,6 +42,7 @@ export interface Task {
   proposalId?: string;
   agent: string;
   task: string;
+  title?: string;
   description?: string;
   reason: string;
   expectedOutcome: string;
