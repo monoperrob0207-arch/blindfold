@@ -13,6 +13,7 @@ const typeConfig = {
 
 export function NotificationPanel() {
   const { notifications, unreadCount, markNotificationRead, markAllNotificationsRead } = useBlindfoldStore();
+  const unread = unreadCount();
 
   return (
     <motion.div
@@ -26,13 +27,13 @@ export function NotificationPanel() {
         <div className="flex items-center gap-2">
           <span className="text-lg">🔔</span>
           <h3 className="font-semibold text-white">Notifications</h3>
-          {unreadCount > 0 && (
+          {unread > 0 && (
             <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-neon-red text-white">
-              {unreadCount}
+              {unread}
             </span>
           )}
         </div>
-        {unreadCount > 0 && (
+        {unread > 0 && (
           <button
             onClick={markAllNotificationsRead}
             className="text-xs text-neon-blue hover:text-neon-white transition-colors"

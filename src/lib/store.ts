@@ -1,7 +1,7 @@
 'use client';
 
 import { create } from 'zustand';
-import { Agent, Proposal, Task, AgentCommunication, SystemStats, Activity } from '@/lib/types';
+import { Agent, Proposal, Task, AgentCommunication, SystemStats, Activity, Notification } from '@/lib/types';
 
 interface BlindfoldStore {
   // Agents
@@ -13,6 +13,12 @@ interface BlindfoldStore {
   
   // Activities
   activities: Activity[];
+  
+  // Notifications
+  notifications: Notification[];
+  unreadCount: () => number;
+  markNotificationRead: (id: string) => void;
+  markAllNotificationsRead: () => void;
   
   // Proposals
   proposals: Proposal[];
@@ -59,6 +65,22 @@ export const useBlindfoldStore = create<BlindfoldStore>((set, get) => ({
   
   // Activities
   activities: [],
+  
+  // Notifications
+  notifications: [],
+  unreadCount: () => get().notifications.filter(n => !n.read).length,
+  markNotificationRead: (id) => {
+    set(state => ({
+      notifications: state.notifications.map(n => 
+        n.id === id ? { ...n, read: true } : n
+      )
+    }));
+  },
+  markAllNotificationsRead: () => {
+    set(state => ({
+      notifications: state.notifications.map(n => ({ ...n, read: true }))
+    }));
+  },
   
   // Proposals
   proposals: [],

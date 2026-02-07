@@ -101,4 +101,14 @@ export interface Activity {
   type: 'completion' | 'start' | 'comment' | 'alert' | 'system';
 }
 
+export interface Notification {
+  id: string;
+  agentName: string;
+  agentCode?: string;
+  message: string;
+  type: 'info' | 'warning' | 'success' | 'error';
+  read: boolean;
+  timestamp: string;
+}
+
 export { Agent, Proposal, Task, AgentMessage, AgentFeedback, AgentCommunication, AgentVote };
