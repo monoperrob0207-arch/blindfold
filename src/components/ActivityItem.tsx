@@ -5,7 +5,7 @@ import { Activity } from '@/lib/types';
 import { formatDistanceToNow } from 'date-fns';
 import { useBlindfoldStore } from '@/lib/store';
 
-const typeConfig: Record<Activity['type'], { icon: string; color: string; bg: string }> = {
+const typeConfig: Record<string, { icon: string; color: string; bg: string }> = {
   completion: { icon: '✅', color: 'text-neon-blue', bg: 'bg-neon-blue/10' },
   start: { icon: '🚀', color: 'text-neon-blue', bg: 'bg-neon-blue/10' },
   comment: { icon: '💬', color: 'text-purple-400', bg: 'bg-purple-400/10' },
@@ -20,8 +20,8 @@ interface ActivityItemProps {
 
 export function ActivityItem({ activity, index }: ActivityItemProps) {
   const { getAgentByCode } = useBlindfoldStore();
-  const agent = getAgentByCode(activity.agentCode);
-  const config = typeConfig[activity.type];
+  const agent = activity.agentCode ? getAgentByCode(activity.agentCode) : undefined;
+  const config = typeConfig[activity.type] || typeConfig.system;
 
   return (
     <motion.div
