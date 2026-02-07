@@ -47,7 +47,7 @@ export function TaskCard({ task, columnId }: TaskCardProps) {
           {priority.label}
         </span>
         <span className="text-xs text-gray-500">
-          {formatDistanceToNow(new Date(task.updatedAt), { addSuffix: true })}
+          {formatDistanceToNow(new Date(task.updatedAt || task.createdAt || new Date()), { addSuffix: true })}
         </span>
       </div>
 
