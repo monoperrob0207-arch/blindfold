@@ -25,6 +25,7 @@ interface BlindfoldStore {
   setTasks: (tasks: Task[]) => void;
   activeTasks: () => Task[];
   completedTasks: () => Task[];
+  getTasksByStatus: (status: string) => Task[];
   
   // Communication
   communication: AgentCommunication | null;
@@ -70,6 +71,7 @@ export const useBlindfoldStore = create<BlindfoldStore>((set, get) => ({
   setTasks: (tasks) => set({ tasks }),
   activeTasks: () => get().tasks.filter(t => t.status === 'in_progress'),
   completedTasks: () => get().tasks.filter(t => t.status === 'completed'),
+  getTasksByStatus: (status) => get().tasks.filter(t => t.status === status),
   
   // Communication
   communication: null,
