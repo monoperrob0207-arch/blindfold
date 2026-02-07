@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useBlindfoldStore } from '@/lib/store';
 import { NotificationPanel } from './NotificationPanel';
+import { Dashboard } from './Dashboard';
 
 export function MainContent() {
   const { selectedView } = useBlindfoldStore();

@@ -4,6 +4,7 @@ export interface Agent {
   id: string;
   name: string;
   role: string;
+  description?: string;
   status: 'idle' | 'active' | 'thinking' | 'collaborating';
   color: string;
   capabilities: string[];
@@ -38,11 +39,13 @@ export interface AgentVote {
 
 export interface Task {
   id: string;
-  proposalId: string;
+  proposalId?: string;
   agent: string;
   task: string;
+  description?: string;
   reason: string;
   expectedOutcome: string;
+  priority: 'low' | 'medium' | 'high' | 'critical';
   status: 'pending' | 'in_progress' | 'completed' | 'failed';
   createdAt?: string;
   startedAt?: string;
