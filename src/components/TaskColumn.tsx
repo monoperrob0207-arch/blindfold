@@ -14,11 +14,14 @@ interface TaskColumnProps {
 }
 
 const columnConfig: Record<Task['status'], { color: string; gradient: string }> = {
+  pending: { color: '#8b5cf6', gradient: 'from-violet-500/20' },
   inbox: { color: '#8b5cf6', gradient: 'from-violet-500/20' },
   assigned: { color: '#3b82f6', gradient: 'from-blue-500/20' },
   in_progress: { color: '#f59e0b', gradient: 'from-amber-500/20' },
   review: { color: '#10b981', gradient: 'from-emerald-500/20' },
   done: { color: '#6b7280', gradient: 'from-gray-500/20' },
+  completed: { color: '#6b7280', gradient: 'from-gray-500/20' },
+  failed: { color: '#ef4444', gradient: 'from-red-500/20' },
   blocked: { color: '#ef4444', gradient: 'from-red-500/20' },
 };
 
