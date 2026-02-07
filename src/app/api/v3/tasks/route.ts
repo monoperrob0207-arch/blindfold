@@ -1,20 +1,11 @@
 import { NextResponse } from 'next/server';
+var runtime = require('./lib/runtime');
 
 export const dynamic = 'force-dynamic';
 
 export function GET() {
   try {
-    var tasks: any[] = [];
-    try {
-      var fs = require('fs');
-      var tasksFile = '/home/ubuntu/.openclaw/workspace/blindfold-v3/data/tasks.json';
-      if (fs.existsSync(tasksFile)) {
-        tasks = JSON.parse(fs.readFileSync(tasksFile, 'utf-8'));
-      }
-    } catch (e) {
-      tasks = [];
-    }
-    
+    const tasks = runtime.getTasks();
     return NextResponse.json({
       tasks: tasks,
       timestamp: new Date().toISOString(),

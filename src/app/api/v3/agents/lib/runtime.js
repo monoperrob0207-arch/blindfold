@@ -1,11 +1,8 @@
 /**
  * Blindfold v3 - Agent Runtime System
  * Agentes proactivos con comunicación, propuestas y colaboración
- * Compatible con Vercel (usa mock data si no hay archivos locales)
+ * Compatible con Vercel (usa mock data)
  */
-
-const fs = require('fs');
-const path = require('path');
 
 // ============ MOCK DATA ============
 const MOCK_AGENTS = [

@@ -1,20 +1,11 @@
 import { NextResponse } from 'next/server';
+var runtime = require('./lib/runtime');
 
 export const dynamic = 'force-dynamic';
 
 export function GET() {
   try {
-    var proposals: any[] = [];
-    try {
-      var fs = require('fs');
-      var proposalsFile = '/home/ubuntu/.openclaw/workspace/blindfold-v3/data/proposals.json';
-      if (fs.existsSync(proposalsFile)) {
-        proposals = JSON.parse(fs.readFileSync(proposalsFile, 'utf-8'));
-      }
-    } catch (e) {
-      proposals = [];
-    }
-    
+    const proposals = runtime.getProposals();
     return NextResponse.json({
       proposals: proposals,
       timestamp: new Date().toISOString(),
@@ -43,33 +34,7 @@ export async function POST(request: Request) {
       );
     }
     
-    var runtime = require('./lib/runtime');
-    var fs = require('fs');
-    
-    var proposal = {
-      id: 'prop_' + Date.now(),
-      agent: agentName,
-      agentId: agentName.toLowerCase().replace(/\s+/g, '_'),
-      task: task,
-      reason: reason,
-      expectedOutcome: expectedOutcome,
-      priority: priority,
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-      votes: [],
-      dependencies: []
-    };
-    
-    var proposalsFile = '/home/ubuntu/.openclaw/workspace/blindfold-v3/data/proposals.json';
-    var proposals: any[] = [];
-    try {
-      if (fs.existsSync(proposalsFile)) {
-        proposals = JSON.parse(fs.readFileSync(proposalsFile, 'utf-8'));
-      }
-    } catch (e) {}
-    
-    proposals.unshift(proposal);
-    fs.writeFileSync(proposalsFile, JSON.stringify(proposals, null, 2));
+    var proposal = runtime.createProposal(agentName, task, reason, expectedOutcome, priority);
     
     return NextResponse.json({
       proposal: proposal,
