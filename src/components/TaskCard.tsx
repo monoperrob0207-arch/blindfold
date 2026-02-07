@@ -89,7 +89,7 @@ export function TaskCard({ task, columnId }: TaskCardProps) {
                 className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
                 style={{ backgroundColor: assignee.color, color: '#000' }}
               >
-                {assignee.code[0]}
+                {assignee.code?.[0] || assignee.name[0]}
               </div>
               <span className="text-xs text-gray-400">{assignee.name}</span>
             </>
