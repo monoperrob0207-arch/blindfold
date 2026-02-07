@@ -85,3 +85,15 @@ export interface SystemStats {
   successRate: number;
   uptime: string;
 }
+
+export interface Activity {
+  id: string;
+  agentCode?: string;
+  agentName: string;
+  action: string;
+  target: string;
+  timestamp: string;
+  type: 'completion' | 'start' | 'comment' | 'alert' | 'system';
+}
+
+export { Agent, Proposal, Task, AgentMessage, AgentFeedback, AgentCommunication, AgentVote };
