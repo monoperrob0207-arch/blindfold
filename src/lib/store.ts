@@ -35,6 +35,8 @@ interface BlindfoldStore {
   toggleProposalsPanel: () => void;
   showHistoryPanel: boolean;
   toggleHistoryPanel: () => void;
+  selectedView: 'dashboard' | 'tasks' | 'agents' | 'activity';
+  setSelectedView: (view: 'dashboard' | 'tasks' | 'agents' | 'activity') => void;
   
   // Stats
   stats: SystemStats;
@@ -78,6 +80,8 @@ export const useBlindfoldStore = create<BlindfoldStore>((set, get) => ({
   toggleProposalsPanel: () => set(state => ({ showProposalsPanel: !state.showProposalsPanel })),
   showHistoryPanel: false,
   toggleHistoryPanel: () => set(state => ({ showHistoryPanel: !state.showHistoryPanel })),
+  selectedView: 'dashboard',
+  setSelectedView: (view) => set({ selectedView: view }),
   
   // Stats
   stats: {
