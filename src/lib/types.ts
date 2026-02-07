@@ -4,6 +4,7 @@ export interface Agent {
   id: string;
   name: string;
   role: string;
+  code?: string;
   description?: string;
   status: 'idle' | 'active' | 'thinking' | 'collaborating';
   color: string;
