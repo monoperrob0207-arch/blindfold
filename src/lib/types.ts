@@ -48,7 +48,7 @@ export interface Task {
   reason: string;
   expectedOutcome: string;
   priority: 'low' | 'medium' | 'high' | 'critical';
-  status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'blocked';
+  status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'blocked' | 'inbox' | 'assigned' | 'review' | 'done';
   createdAt?: string;
   startedAt?: string;
   completedAt?: string;
