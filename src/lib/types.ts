@@ -117,5 +117,3 @@ export interface Notification {
   read: boolean;
   timestamp: string;
 }
-
-export type { Agent, Proposal, Task, AgentMessage, AgentFeedback, AgentCommunication, AgentVote, TaskPriority, Activity, Notification };
