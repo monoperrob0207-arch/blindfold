@@ -10,6 +10,7 @@ export interface Agent {
   currentTask: string | null;
   lastActive: string;
   suggestionCount: number;
+  avatar?: string;
 }
 
 export interface Proposal {
