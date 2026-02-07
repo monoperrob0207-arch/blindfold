@@ -6,6 +6,7 @@ import { useBlindfoldStore } from '@/lib/store';
 import { formatDistanceToNow } from 'date-fns';
 
 const priorityConfig: Record<TaskPriority, { label: string; bg: string; text: string }> = {
+  critical: { label: 'CRIT', bg: 'bg-neon-red/30', text: 'text-neon-red' },
   high: { label: 'HIGH', bg: 'bg-neon-red/20', text: 'text-neon-red' },
   medium: { label: 'MED', bg: 'bg-yellow-500/20', text: 'text-yellow-500' },
   low: { label: 'LOW', bg: 'bg-gray-500/20', text: 'text-gray-400' },
