@@ -1,63 +1,87 @@
-export type AgentStatus = 'active' | 'idle' | 'sleeping' | 'offline';
+// Blindfold v3 Types
 
 export interface Agent {
   id: string;
   name: string;
-  code: string;
   role: string;
-  description: string;
-  status: AgentStatus;
-  currentTask: string | null;
+  status: 'idle' | 'active' | 'thinking' | 'collaborating';
   color: string;
-  avatar: string;
-  stats: {
-    tasksCompleted: number;
-    successRate: number;
-    avgTime: string;
-  };
+  capabilities: string[];
+  currentTask: string | null;
+  lastActive: string;
+  suggestionCount: number;
 }
 
-export type TaskStatus = 'inbox' | 'assigned' | 'in_progress' | 'review' | 'done' | 'blocked';
-export type TaskPriority = 'high' | 'medium' | 'low';
+export interface Proposal {
+  id: string;
+  agent: string;
+  agentId: string;
+  task: string;
+  reason: string;
+  expectedOutcome: string;
+  priority: 'low' | 'medium' | 'high' | 'critical';
+  status: 'pending' | 'approved' | 'rejected' | 'completed';
+  createdAt: string;
+  approvedBy?: string;
+  approvedAt?: string;
+  votes: AgentVote[];
+  dependencies: string[];
+}
+
+export interface AgentVote {
+  agent: string;
+  vote: 'support' | 'oppose' | 'abstain';
+  comment?: string;
+  timestamp: string;
+}
 
 export interface Task {
   id: string;
-  title: string;
-  description: string;
-  status: TaskStatus;
-  priority: TaskPriority;
-  assignee: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  progress: number;
-  comments: number;
+  proposalId: string;
+  agent: string;
+  task: string;
+  reason: string;
+  expectedOutcome: string;
+  status: 'pending' | 'in_progress' | 'completed' | 'failed';
+  createdAt?: string;
+  startedAt?: string;
+  completedAt?: string;
+  result?: string;
 }
 
-export interface Activity {
+export interface AgentMessage {
   id: string;
-  agentCode: string;
-  agentName: string;
-  action: string;
-  target: string;
-  timestamp: Date;
-  type: 'completion' | 'start' | 'comment' | 'alert' | 'system';
+  from: string;
+  to?: string;
+  type: 'proposal' | 'collaboration_request' | 'feedback' | 'task_assigned' | 'task_completed' | 'system';
+  content: string;
+  timestamp: string;
+  proposalId?: string;
+  taskId?: string;
+  rating?: number;
 }
 
-export interface Notification {
+export interface AgentFeedback {
   id: string;
-  agentCode: string;
-  agentName: string;
-  message: string;
-  timestamp: Date;
-  read: boolean;
-  type: 'info' | 'warning' | 'success' | 'error';
+  from: string;
+  to: string;
+  aboutTask: string;
+  feedback: string;
+  rating: number;
+  timestamp: string;
 }
 
-export interface BlindfoldState {
-  agents: Agent[];
-  tasks: Task[];
-  activities: Activity[];
-  notifications: Notification[];
-  selectedAgent: string | null;
-  selectedView: 'dashboard' | 'tasks' | 'agents' | 'activity';
+export interface AgentCommunication {
+  messages: AgentMessage[];
+  feedbacks: AgentFeedback[];
+  updatedAt: string;
+}
+
+export interface SystemStats {
+  totalAgents: number;
+  activeAgents: number;
+  pendingProposals: number;
+  completedTasks: number;
+  successRate: number;
+  uptime: string;
 }

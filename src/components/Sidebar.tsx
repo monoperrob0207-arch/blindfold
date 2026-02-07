@@ -1,114 +1,99 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { LayoutDashboard, Bell, Settings, Users, Activity } from 'lucide-react';
 import { useBlindfoldStore } from '@/lib/store';
 
-const viewConfig = {
-  dashboard: { icon: '📊', label: 'Dashboard' },
-  tasks: { icon: '📋', label: 'Tasks' },
-  agents: { icon: '🤖', label: 'Agents' },
-  activity: { icon: '📡', label: 'Activity' },
-} as const;
-
 export function Sidebar() {
-  const { selectedView, setSelectedView, notifications, unreadCount } = useBlindfoldStore();
+  const { toggleProposalsPanel, toggleHistoryPanel, stats } = useBlindfoldStore();
 
   return (
     <motion.aside
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      className="w-20 lg:w-64 h-screen flex flex-col bg-onix-950/50 border-r border-white/5"
+      className="w-20 lg:w-64 h-screen flex flex-col bg-onyx-950/80 border-r border-white/5"
     >
       {/* Logo */}
       <div className="p-4 lg:p-6 border-b border-white/5">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="flex items-center gap-3"
-        >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-neon-red to-neon-blue 
-                         flex items-center justify-center text-xl shadow-lg shadow-neon-blue/20">
-            👁️
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-neon-red to-neon-blue flex items-center justify-center shadow-lg neon-glow-blue">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-5 h-5 text-white"
+            >
+              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
           </div>
           <div className="hidden lg:block">
             <h1 className="font-bold text-white text-lg">Blindfold</h1>
-            <p className="text-xs text-gray-500">Mission Control</p>
+            <p className="text-xs text-gray-500">Mission Control v3</p>
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 p-3 lg:p-4 space-y-2">
-        {(Object.keys(viewConfig) as Array<keyof typeof viewConfig>).map((view) => {
-          const config = viewConfig[view];
-          const isSelected = selectedView === view;
-          
-          return (
-            <motion.button
-              key={view}
-              whileHover={{ x: 4 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => setSelectedView(view)}
-              className={`w-full flex items-center gap-3 px-3 lg:px-4 py-3 rounded-xl
-                         transition-all duration-200 group
-                         ${isSelected 
-                           ? 'bg-gradient-to-r from-neon-blue/20 to-transparent border border-neon-blue/30' 
-                           : 'hover:bg-white/5 border border-transparent'
-                         }`}
-            >
-              <span className={`text-xl transition-transform duration-200 
-                              ${isSelected ? 'scale-110' : 'group-hover:scale-110'}`}>
-                {config.icon}
-              </span>
-              <span className={`hidden lg:block font-medium transition-colors
-                             ${isSelected ? 'text-neon-blue' : 'text-gray-400 group-hover:text-white'}`}>
-                {config.label}
-              </span>
-              {isSelected && (
-                <motion.div
-                  layoutId="activeIndicator"
-                  className="ml-auto w-1.5 h-1.5 rounded-full bg-neon-blue hidden lg:block"
-                />
-              )}
-            </motion.button>
-          );
-        })}
+        <button className="w-full flex items-center gap-3 px-3 lg:px-4 py-3 rounded-xl bg-neon-blue/10 border border-neon-blue/30 text-neon-blue">
+          <LayoutDashboard className="w-5 h-5" />
+          <span className="hidden lg:block font-medium">Dashboard</span>
+        </button>
+
+        <button
+          onClick={toggleProposalsPanel}
+          className="w-full flex items-center gap-3 px-3 lg:px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all"
+        >
+          <Users className="w-5 h-5" />
+          <span className="hidden lg:block font-medium">Propuestas</span>
+          {stats.pendingProposals > 0 && (
+            <span className="hidden lg:flex ml-auto px-2 py-0.5 rounded-full text-xs bg-neon-blue text-black font-bold">
+              {stats.pendingProposals}
+            </span>
+          )}
+        </button>
+
+        <button
+          onClick={toggleHistoryPanel}
+          className="w-full flex items-center gap-3 px-3 lg:px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all"
+        >
+          <Activity className="w-5 h-5" />
+          <span className="hidden lg:block font-medium">Historial</span>
+        </button>
+
+        <button className="w-full flex items-center gap-3 px-3 lg:px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all">
+          <Bell className="w-5 h-5" />
+          <span className="hidden lg:block font-medium">Notificaciones</span>
+        </button>
+
+        <button className="w-full flex items-center gap-3 px-3 lg:px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all">
+          <Settings className="w-5 h-5" />
+          <span className="hidden lg:block font-medium">Settings</span>
+        </button>
       </nav>
 
-      {/* Stats summary */}
-      <div className="p-4 border-t border-white/5">
-        <div className="hidden lg:block p-4 rounded-xl bg-gradient-to-br from-white/5 to-white/0 border border-white/5">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-sm">⚡</span>
-            <span className="text-xs text-gray-400">System Status</span>
-          </div>
-          <div className="grid grid-cols-2 gap-2 text-center">
-            <div>
-              <p className="text-lg font-bold text-neon-blue">4</p>
-              <p className="text-xs text-gray-500">Agents</p>
-            </div>
-            <div>
-              <p className="text-lg font-bold text-neon-red">3</p>
-              <p className="text-xs text-gray-500">Active</p>
-            </div>
-          </div>
+      {/* System Status */}
+      <div className="hidden lg:block p-4 rounded-xl bg-gradient-to-br from-white/5 to-white/0 border border-white/5 mt-4 mx-3 mb-3">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-2 h-2 rounded-full bg-neon-blue animate-pulse" />
+          <span className="text-xs text-gray-400">System Status</span>
         </div>
-
-        {/* Notification bell (mobile) */}
-        <div className="lg:hidden flex items-center justify-center gap-2 mt-4">
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10"
-          >
-            <span className="relative">
-              <span className="text-xl">🔔</span>
-              {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-neon-red text-white 
-                               text-[10px] flex items-center justify-center font-bold">
-                  {unreadCount}
-                </span>
-              )}
-            </span>
-          </motion.button>
+        <div className="grid grid-cols-2 gap-2 text-center">
+          <div>
+            <p className="text-lg font-bold text-neon-blue">{stats.totalAgents}</p>
+            <p className="text-xs text-gray-500">Agentes</p>
+          </div>
+          <div>
+            <p className="text-lg font-bold text-green-400">{stats.completedTasks}</p>
+            <p className="text-xs text-gray-500">Tareas</p>
+          </div>
         </div>
       </div>
     </motion.aside>

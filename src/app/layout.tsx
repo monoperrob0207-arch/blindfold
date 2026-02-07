@@ -5,9 +5,8 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Blindfold - Mission Control',
-  description: 'Multi-Agent Orchestration System',
-  keywords: ['AI', 'Agents', 'Mission Control', 'Automation'],
+  title: 'Blindfold v3 - Mission Control',
+  description: 'Multi-Agent Orchestration System with Proactive Agents',
 };
 
 export default function RootLayout({
@@ -17,9 +16,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.className} bg-onix-950 text-white antialiased`}>
+      <body className={`${inter.className} bg-onyx-950 text-white antialiased`}>
         <div className="grid-bg fixed inset-0 pointer-events-none" />
-        <div className="relative z-10">
+        <div className="relative z-10 flex h-screen overflow-hidden">
           {children}
         </div>
       </body>

@@ -1,6 +1,6 @@
 {
-  "name": "blindfold",
-  "version": "1.0.0",
+  "name": "blindfold-v3",
+  "version": "3.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,21 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "date-fns": "^3.6.0",
-    "framer-motion": "^11.2.10",
-    "lucide-react": "^0.379.0",
     "next": "14.2.3",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "zustand": "^5.0.11"
+    "react": "^18",
+    "react-dom": "^18",
+    "framer-motion": "^11.0.0",
+    "zustand": "^4.5.0",
+    "date-fns": "^3.6.0",
+    "lucide-react": "^0.378.0"
   },
   "devDependencies": {
-    "@types/node": "^20.14.2",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.4",
-    "typescript": "^5.4.5"
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5",
+    "tailwindcss": "^3.4.1",
+    "postcss": "^8",
+    "autoprefixer": "^10.4.19"
   }
 }

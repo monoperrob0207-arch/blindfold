@@ -5,3 +5,6 @@ out/
 *.log
 .DS_Store
 *.tsbuildinfo
+node_modules/
+.next/
+.env.local

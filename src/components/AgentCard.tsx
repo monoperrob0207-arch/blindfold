@@ -2,30 +2,36 @@
 
 import { motion } from 'framer-motion';
 import { useBlindfoldStore } from '@/lib/store';
-import { Agent, AgentStatus } from '@/lib/types';
+import { Terminal, Zap, Users, MessageSquare, Lightbulb, ArrowRight } from 'lucide-react';
 
-const statusColors: Record<AgentStatus, { bg: string; border: string; pulse: string }> = {
-  active: { bg: 'from-neon-blue/20', border: 'border-neon-blue', pulse: 'bg-neon-blue' },
-  idle: { bg: 'from-yellow-500/20', border: 'border-yellow-500', pulse: 'bg-yellow-500' },
-  sleeping: { bg: 'from-gray-500/20', border: 'border-gray-500', pulse: 'bg-gray-500' },
-  offline: { bg: 'from-red-500/20', border: 'border-red-500', pulse: 'bg-red-500' },
+const statusConfig = {
+  active: { color: 'bg-neon-blue', label: 'Activo', glow: 'shadow-neon-blue' },
+  idle: { color: 'bg-gray-500', label: 'Inactivo', glow: 'shadow-gray-500' },
+  thinking: { color: 'bg-purple-500', label: 'Pensando', glow: 'shadow-purple-500' },
+  collaborating: { color: 'bg-green-500', label: 'Colaborando', glow: 'shadow-green-500' },
 };
 
-const statusLabels: Record<AgentStatus, string> = {
-  active: 'Active',
-  idle: 'Idle',
-  sleeping: 'Sleeping',
-  offline: 'Offline',
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Bot: Terminal,
+  Terminal: Terminal,
+  Layout: Terminal,
+  Server: Terminal,
+  Database: Terminal,
+  Settings: Terminal,
+  Shield: Terminal,
+  Search: Terminal,
 };
 
 interface AgentCardProps {
-  agent: Agent;
+  agent: any;
   index: number;
 }
 
 export function AgentCard({ agent, index }: AgentCardProps) {
-  const { selectedView, setSelectedView } = useBlindfoldStore();
-  const colors = statusColors[agent.status];
+  const { selectAgent, selectedAgent, showProposalsPanel, toggleProposalsPanel } = useBlindfoldStore();
+  const status = statusConfig[agent.status as keyof typeof statusConfig] || statusConfig.idle;
+  const Icon = iconMap[agent.icon] || Terminal;
+  const isSelected = selectedAgent === agent.id;
 
   return (
     <motion.div
@@ -33,69 +39,103 @@ export function AgentCard({ agent, index }: AgentCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.5 }}
       whileHover={{ scale: 1.02 }}
-      className={`agent-card relative overflow-hidden rounded-2xl bg-gradient-to-br ${colors.bg} to-transparent
-                  border border-white/5 backdrop-blur-sm p-5 cursor-pointer
-                  hover:border-white/10 hover:bg-white/5 transition-all duration-300`}
-      onClick={() => setSelectedView('agents')}
+      onClick={() => selectAgent(isSelected ? null : agent.id)}
+      className={`relative overflow-hidden rounded-xl bg-onyx-800/60 border backdrop-blur-sm p-5 cursor-pointer
+                 transition-all duration-300 card-hover
+                 ${isSelected ? 'border-neon-blue/50' : 'border-white/5'}`}
     >
       {/* Status indicator */}
       <div className="absolute top-4 right-4 flex items-center gap-2">
-        <div className={`w-2 h-2 rounded-full ${colors.pulse} ${agent.status === 'active' ? 'animate-pulse' : ''}`} />
-        <span className="text-xs text-gray-400 font-medium">{statusLabels[agent.status]}</span>
+        <div className={`w-2 h-2 rounded-full ${status.color} relative`}>
+          {(agent.status === 'active' || agent.status === 'thinking' || agent.status === 'collaborating') && (
+            <span className={`absolute inset-0 rounded-full animate-ping ${status.color} opacity-75`} />
+          )}
+        </div>
+        <span className="text-xs text-gray-400">{status.label}</span>
       </div>
 
-      <div className="flex items-start gap-4">
-        {/* Avatar */}
+      {/* Header */}
+      <div className="flex items-center gap-4 mb-4">
         <motion.div
           whileHover={{ rotate: 10 }}
-          className="w-14 h-14 rounded-xl bg-gradient-to-br from-white/10 to-white/5 
-                     flex items-center justify-center text-2xl shadow-lg"
+          className={`w-12 h-12 rounded-lg flex items-center justify-center
+                     bg-gradient-to-br from-white/5 to-white/0 border border-white/10`}
           style={{ borderLeft: `3px solid ${agent.color}` }}
         >
-          {agent.avatar}
+          <div style={{ color: agent.color }}>
+            <Icon className="w-6 h-6" />
+          </div>
         </motion.div>
-
-        {/* Info */}
-        <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-bold text-white truncate">{agent.name}</h3>
+        <div>
+          <h3 className="text-lg font-semibold text-white">{agent.name}</h3>
           <p className="text-sm text-gray-400">{agent.role}</p>
         </div>
       </div>
 
-      {/* Current task */}
-      <div className="mt-4 p-3 rounded-lg bg-black/30">
-        <div className="flex items-center gap-2 text-xs text-gray-400 mb-1">
-          <span>📝</span>
-          <span>Current Task</span>
-        </div>
-        <p className="text-sm text-white font-medium truncate">
-          {agent.currentTask || 'No active task'}
-        </p>
-      </div>
-
-      {/* Stats */}
-      <div className="mt-4 grid grid-cols-3 gap-2">
-        <div className="text-center p-2 rounded-lg bg-white/5">
-          <p className="text-lg font-bold gradient-text">{agent.stats.tasksCompleted}</p>
-          <p className="text-xs text-gray-400">Tasks</p>
-        </div>
-        <div className="text-center p-2 rounded-lg bg-white/5">
-          <p className="text-lg font-bold text-neon-blue">{agent.stats.successRate}%</p>
-          <p className="text-xs text-gray-400">Success</p>
-        </div>
-        <div className="text-center p-2 rounded-lg bg-white/5">
-          <p className="text-lg font-bold text-neon-red">{agent.stats.avgTime}</p>
-          <p className="text-xs text-gray-400">Avg Time</p>
+      {/* Capabilities */}
+      <div className="mb-4">
+        <div className="flex flex-wrap gap-1">
+          {agent.capabilities?.slice(0, 3).map((cap: string) => (
+            <span 
+              key={cap}
+              className="px-2 py-0.5 rounded text-xs bg-white/5 text-gray-400"
+            >
+              {cap}
+            </span>
+          ))}
+          {agent.capabilities?.length > 3 && (
+            <span className="px-2 py-0.5 rounded text-xs bg-white/5 text-neon-blue">
+              +{agent.capabilities.length - 3}
+            </span>
+          )}
         </div>
       </div>
 
-      {/* Hover glow effect */}
-      <div 
-        className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-        style={{ 
-          background: `radial-gradient(circle at 50% 0%, ${agent.color}10%, transparent 70%)` 
-        }}
-      />
+      {/* Current Activity */}
+      {agent.status === 'thinking' && (
+        <div className="mb-4 p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+          <div className="flex items-center gap-2 text-purple-400 text-sm mb-1">
+            <Lightbulb className="w-4 h-4" />
+            <span className="font-medium">Pensando...</span>
+          </div>
+          <p className="text-sm text-gray-400">Analizando tareas pendientes</p>
+        </div>
+      )}
+
+      {agent.status === 'collaborating' && (
+        <div className="mb-4 p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+          <div className="flex items-center gap-2 text-green-400 text-sm mb-1">
+            <Users className="w-4 h-4" />
+            <span className="font-medium">Colaborando...</span>
+          </div>
+          <p className="text-sm text-gray-400">Working with other agents</p>
+        </div>
+      )}
+
+      {/* Suggestion count */}
+      {agent.suggestionCount > 0 && (
+        <div 
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleProposalsPanel();
+          }}
+          className="mb-4 p-3 rounded-lg bg-neon-blue/10 border border-neon-blue/20 cursor-pointer hover:bg-neon-blue/20 transition-colors"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-neon-blue text-sm">
+              <MessageSquare className="w-4 h-4" />
+              <span>{agent.suggestionCount} propuesta(s)</span>
+            </div>
+            <ArrowRight className="w-4 h-4 text-neon-blue" />
+          </div>
+        </div>
+      )}
+
+      {/* Last active */}
+      <div className="flex items-center gap-2 text-xs text-gray-500">
+        <Zap className="w-3 h-3" />
+        <span>Último activo: {new Date(agent.lastActive).toLocaleTimeString()}</span>
+      </div>
     </motion.div>
   );
 }
